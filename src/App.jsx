@@ -1,10 +1,8 @@
 import React from "react";
-// import "./App.css";
+import Routers from "./Routers";
 
 function App() {
-  // const [count, setCount] = useState(0);
-  // https://api.dictionaryapi.dev/api/v2/entries/en/<word>
-  return <h1 className=" bg-orange-700">HI</h1>;
+  return <Routers />;
 }
 
 export default App;
