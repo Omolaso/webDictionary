@@ -7,4 +7,4 @@ Firebase, and a free dictionary API.
 
 You get to create an account to access the dictionary, thanks to Firebase.
 
-Chexk it out here: https://webdictionary-auth.web.app/
+Check it out here: https://webdictionary-auth.web.app/
