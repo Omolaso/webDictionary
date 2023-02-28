@@ -1,23 +1,60 @@
 import React, { useState, useRef } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faMoon } from "@fortawesome/free-regular-svg-icons";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { dictionaryURLs } from "../URLS";
+import { auth } from "../firebase";
+import { signInWithEmailAndPassword } from "firebase/auth";
+import { useFormik } from "formik";
+import * as Yup from "yup";
 
 const Login = () => {
   const [bgToggle, setBgToggle] = useState(false);
   const [passwordToggle, setPasswordToggle] = useState(false);
+  const [userExist, setUserExist] = useState(false);
+  const navigate = useNavigate();
 
   const emailRef = useRef();
   const passwordRef = useRef();
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    console.log(emailRef.current.value, passwordRef.current.value);
+  const emailRegExp =
+    // eslint-disable-next-line no-useless-escape
+    /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,4}))$/;
 
-    emailRef.current.value = "";
-    passwordRef.current.value = "";
-  };
+  const passwordRegExp = /^.{8,}$/;
+  // /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$/; FULL PASSWORD REGEX
+
+  const formik = useFormik({
+    initialValues: {
+      email: "",
+      password: "",
+    },
+
+    validationSchema: Yup.object({
+      email: Yup.string()
+        .required("Required")
+        .matches(emailRegExp, "Invalid email address"),
+
+      password: Yup.string()
+        .required("Required")
+        .matches(passwordRegExp, "Minimum of 8 characters."),
+    }),
+
+    onSubmit: (values, { resetForm }) => {
+      const email = emailRef.current.value;
+      const password = passwordRef.current.value;
+
+      signInWithEmailAndPassword(auth, email, password)
+        .then((userDetails) => {
+          console.log(userDetails);
+          navigate(dictionaryURLs.dico);
+        })
+        .catch((err) => console.log("Error:", err))
+        .finally(() => setUserExist(true));
+
+      resetForm();
+    },
+  });
 
   return (
     <main
@@ -55,10 +92,7 @@ const Login = () => {
             Login to access your dictionary!
           </h1>
 
-          <form
-            onSubmit={(e) => handleSubmit(e)}
-            className="flex flex-col gap-4"
-          >
+          <form onSubmit={formik.handleSubmit} className="flex flex-col gap-4">
             <label
               htmlFor="email"
               className="flex flex-col gap-1 text-[16px] font-medium md:text-[20px] md:font-semibold"
@@ -72,7 +106,13 @@ const Login = () => {
                 placeholder="johndoe@gmail.com"
                 className="min-h-[50px] rounded-lg bg-[transparent] px-3 shadow-[0px_0px_0px_2px_] shadow-grey placeholder:font-extralight placeholder:opacity-50 placeholder:duration-500 hover:shadow-purple focus:outline-0 focus:placeholder:opacity-0 focus:placeholder:duration-500"
                 autoComplete="off"
+                {...formik.getFieldProps("email")}
               />
+              {formik.touched.email && formik.errors.email ? (
+                <div className="text-[16px] font-medium text-red">
+                  {formik.errors.email}
+                </div>
+              ) : null}
             </label>
 
             <label
@@ -89,7 +129,9 @@ const Login = () => {
                   placeholder="xxxxxxxxxxx"
                   className="h-full flex-1 bg-[transparent] placeholder:font-extralight placeholder:opacity-50 placeholder:duration-500 focus:outline-0 focus:placeholder:opacity-0 focus:placeholder:duration-500"
                   autoComplete="off"
+                  {...formik.getFieldProps("password")}
                 />
+
                 <button
                   type="button"
                   onClick={() => setPasswordToggle(!passwordToggle)}
@@ -98,7 +140,16 @@ const Login = () => {
                   {passwordToggle ? "HIDE" : "SHOW"}
                 </button>
               </div>
+              {formik.touched.password && formik.errors.password ? (
+                <div className="text-[16px] font-medium text-red">
+                  {formik.errors.password}
+                </div>
+              ) : null}
             </label>
+
+            <p className={userExist ? "block text-center text-red" : "hidden"}>
+              USER NOT FOUND, HAVE YOU CREATED AN ACCOUNT ?
+            </p>
 
             <button
               type="submit"

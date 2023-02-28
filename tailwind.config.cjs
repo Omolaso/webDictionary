@@ -8,6 +8,8 @@ module.exports = {
       white: "#FFFFFF",
       purple: "#9750DD",
       grey: "#6E6E6E",
+      red: "#EF1313",
+      green: "#5BED44",
     },
     fontFamily: {
       sans: ["Roboto", "sans-serif"],

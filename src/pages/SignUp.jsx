@@ -1,36 +1,70 @@
 import React, { useState, useRef } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faMoon } from "@fortawesome/free-regular-svg-icons";
+import { faXmarkCircle, faMoon } from "@fortawesome/free-regular-svg-icons";
 import { dictionaryURLs } from "../URLS";
 import { Link } from "react-router-dom";
+import { auth } from "../firebase";
+import { createUserWithEmailAndPassword } from "firebase/auth";
+import { useFormik } from "formik";
+import * as Yup from "yup";
 
 const SignUp = () => {
   const [bgToggle, setBgToggle] = useState(false);
   const [passwordToggle, setPasswordToggle] = useState(false);
+  const [accountSuccess, setAccountSuccess] = useState(false);
 
-  const nameRef = useRef();
   const emailRef = useRef();
   const passwordRef = useRef();
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    console.log(
-      nameRef.current.value,
-      emailRef.current.value,
-      passwordRef.current.value
-    );
+  const emailRegExp =
+    // eslint-disable-next-line no-useless-escape
+    /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,4}))$/;
 
-    nameRef.current.value = "";
-    emailRef.current.value = "";
-    passwordRef.current.value = "";
-  };
+  const passwordRegExp = /^.{8,}$/;
+  // /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$/; FULL PASSWORD REGEX
+
+  const formik = useFormik({
+    initialValues: {
+      email: "",
+      password: "",
+    },
+
+    validationSchema: Yup.object({
+      email: Yup.string()
+        .required("Required")
+        .matches(emailRegExp, "Invalid email address"),
+
+      password: Yup.string()
+        .required("Required")
+        .matches(passwordRegExp, "Minimum of 8 characters."),
+    }),
+
+    onSubmit: (values, { resetForm }) => {
+      const email = emailRef.current.value;
+      const password = passwordRef.current.value;
+
+      createUserWithEmailAndPassword(auth, email, password)
+        .then(() => {
+          // console.log(userDetails);
+          setAccountSuccess(true);
+
+          setTimeout(() => {
+            setAccountSuccess(false);
+          }, 2000);
+        })
+        .catch((err) => console.log("Error:", err))
+        .finally(() => setAccountSuccess(false));
+
+      resetForm();
+    },
+  });
 
   return (
     <main
       className={
         bgToggle
-          ? "flex min-h-screen flex-col gap-8 bg-white p-4 font-mono md:p-8"
-          : "flex min-h-screen flex-col gap-8 bg-black p-4 font-mono md:p-8"
+          ? "relative flex min-h-screen flex-col gap-8 bg-white p-4 font-mono md:p-8"
+          : "relative flex min-h-screen flex-col gap-8 bg-black p-4 font-mono md:p-8"
       }
     >
       <section className="flex flex-row items-center justify-end gap-4">
@@ -61,26 +95,7 @@ const SignUp = () => {
             Sign up for the best experience!
           </h1>
 
-          <form
-            onSubmit={(e) => handleSubmit(e)}
-            className="flex flex-col gap-4"
-          >
-            <label
-              htmlFor="name"
-              className="flex flex-col gap-1 text-[16px] font-medium md:text-[20px] md:font-semibold"
-            >
-              Name:
-              <input
-                type="text"
-                name="name"
-                id="name"
-                ref={nameRef}
-                placeholder="John Doe"
-                className="min-h-[50px] rounded-lg bg-[transparent] px-3 shadow-[0px_0px_0px_2px_] shadow-grey placeholder:font-extralight placeholder:opacity-50 placeholder:duration-500 hover:shadow-purple focus:outline-0 focus:placeholder:opacity-0 focus:placeholder:duration-500"
-                autoComplete="off"
-              />
-            </label>
-
+          <form onSubmit={formik.handleSubmit} className="flex flex-col gap-4">
             <label
               htmlFor="email"
               className="flex flex-col gap-1 text-[16px] font-medium md:text-[20px] md:font-semibold"
@@ -94,7 +109,13 @@ const SignUp = () => {
                 placeholder="johndoe@gmail.com"
                 className="min-h-[50px] rounded-lg bg-[transparent] px-3 shadow-[0px_0px_0px_2px_] shadow-grey placeholder:font-extralight placeholder:opacity-50 placeholder:duration-500 hover:shadow-purple focus:outline-0 focus:placeholder:opacity-0 focus:placeholder:duration-500"
                 autoComplete="off"
+                {...formik.getFieldProps("email")}
               />
+              {formik.touched.email && formik.errors.email ? (
+                <div className="text-[16px] font-medium text-red">
+                  {formik.errors.email}
+                </div>
+              ) : null}
             </label>
 
             <label
@@ -111,6 +132,7 @@ const SignUp = () => {
                   placeholder="xxxxxxxxxxx"
                   className="h-full flex-1 bg-[transparent] placeholder:font-extralight placeholder:opacity-50 placeholder:duration-500 focus:outline-0 focus:placeholder:opacity-0 focus:placeholder:duration-500"
                   autoComplete="off"
+                  {...formik.getFieldProps("password")}
                 />
                 <button
                   type="button"
@@ -120,13 +142,18 @@ const SignUp = () => {
                   {passwordToggle ? "HIDE" : "SHOW"}
                 </button>
               </div>
+              {formik.touched.password && formik.errors.password ? (
+                <div className="text-[16px] font-medium text-red">
+                  {formik.errors.password}
+                </div>
+              ) : null}
             </label>
 
             <button
               type="submit"
-              className="min-h-[50px] w-full rounded-[6px] border text-[18px] font-medium duration-500 ease-out active:scale-95 md:min-h-[60px] md:rounded-[10px] md:text-[24px] md:font-semibold"
+              className="mt-8 min-h-[50px] w-full rounded-[6px] border text-[18px] font-medium duration-500 ease-out active:scale-95 md:min-h-[60px] md:rounded-[10px] md:text-[24px] md:font-semibold"
             >
-              Log In
+              Create account
             </button>
           </form>
 
@@ -138,6 +165,23 @@ const SignUp = () => {
           </span>
         </div>
       </section>
+
+      <div
+        className={
+          accountSuccess
+            ? "fixed top-[2%] left-[10%] flex min-h-[50px] w-full max-w-[200px] flex-col bg-green p-2 text-white duration-300 md:left-[30%] md:max-w-[420px]"
+            : "fixed top-[-100%] left-[10%] flex w-full max-w-[200px] flex-col bg-green p-2 text-white duration-300 md:left-[30%] md:max-w-[420px]"
+        }
+      >
+        <button
+          type="button"
+          onClick={() => setPasswordToggle(false)}
+          className="self-end"
+        >
+          <FontAwesomeIcon icon={faXmarkCircle} />
+        </button>
+        <h1>Account created successfully. Proceed to login page.</h1>
+      </div>
     </main>
   );
 };

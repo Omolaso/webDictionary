@@ -16,17 +16,14 @@ const Routers = () => {
     {
       path: dictionaryURLs.login,
       element: <Login />,
-      errorElement: <ErrorPage />,
     },
     {
       path: dictionaryURLs.signUp,
       element: <SignUp />,
-      errorElement: <ErrorPage />,
     },
     {
       path: dictionaryURLs.dico,
       element: <Dictionary />,
-      errorElement: <ErrorPage />,
     },
   ]);
 
