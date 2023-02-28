@@ -12,6 +12,7 @@ const SignUp = () => {
   const [bgToggle, setBgToggle] = useState(false);
   const [passwordToggle, setPasswordToggle] = useState(false);
   const [accountSuccess, setAccountSuccess] = useState(false);
+  const [accountFail, setAccountFail] = useState(false);
 
   const emailRef = useRef();
   const passwordRef = useRef();
@@ -39,7 +40,7 @@ const SignUp = () => {
         .matches(passwordRegExp, "Minimum of 8 characters."),
     }),
 
-    onSubmit: (values, { resetForm }) => {
+    onSubmit: () => {
       const email = emailRef.current.value;
       const password = passwordRef.current.value;
 
@@ -50,12 +51,20 @@ const SignUp = () => {
 
           setTimeout(() => {
             setAccountSuccess(false);
-          }, 2000);
+          }, 5000);
         })
-        .catch((err) => console.log("Error:", err))
-        .finally(() => setAccountSuccess(false));
+        .catch((err) => {
+          console.log("Error:", err);
+          setAccountFail(true);
 
-      resetForm();
+          setTimeout(() => {
+            setAccountFail(false);
+          }, 5000);
+        })
+        .finally(() => {
+          setAccountSuccess(false);
+          setAccountFail(false);
+        });
     },
   });
 
@@ -166,21 +175,40 @@ const SignUp = () => {
         </div>
       </section>
 
+      {/* SUCCESS MESSAGE FOR ACCOUNT CREATION SUCCESS */}
       <div
         className={
           accountSuccess
             ? "fixed top-[2%] left-[10%] flex min-h-[50px] w-full max-w-[200px] flex-col bg-green p-2 text-white duration-300 md:left-[30%] md:max-w-[420px]"
-            : "fixed top-[-100%] left-[10%] flex w-full max-w-[200px] flex-col bg-green p-2 text-white duration-300 md:left-[30%] md:max-w-[420px]"
+            : "fixed top-[-50%] left-[10%] flex w-full max-w-[200px] flex-col bg-green p-2 text-white duration-300 md:left-[30%] md:max-w-[420px]"
         }
       >
         <button
           type="button"
-          onClick={() => setPasswordToggle(false)}
+          onClick={() => setAccountSuccess(false)}
           className="self-end"
         >
           <FontAwesomeIcon icon={faXmarkCircle} />
         </button>
         <h1>Account created successfully. Proceed to login page.</h1>
+      </div>
+
+      {/* ERROR MESSAGE FOR ACCOUNT CREATION FAILURE */}
+      <div
+        className={
+          accountFail
+            ? "fixed top-[2%] left-[10%] flex min-h-[50px] w-full max-w-[200px] flex-col bg-red p-2 text-white duration-300 md:left-[30%] md:max-w-[420px]"
+            : "fixed top-[-50%] left-[10%] flex w-full max-w-[200px] flex-col bg-red p-2 text-white duration-300 md:left-[30%] md:max-w-[420px]"
+        }
+      >
+        <button
+          type="button"
+          onClick={() => setAccountFail(false)}
+          className="self-end"
+        >
+          <FontAwesomeIcon icon={faXmarkCircle} />
+        </button>
+        <h1>There was an error, please try again.</h1>
       </div>
     </main>
   );

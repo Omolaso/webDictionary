@@ -40,7 +40,7 @@ const Login = () => {
         .matches(passwordRegExp, "Minimum of 8 characters."),
     }),
 
-    onSubmit: (values, { resetForm }) => {
+    onSubmit: () => {
       const email = emailRef.current.value;
       const password = passwordRef.current.value;
 
@@ -49,10 +49,12 @@ const Login = () => {
           console.log(userDetails);
           navigate(dictionaryURLs.dico);
         })
-        .catch((err) => console.log("Error:", err))
-        .finally(() => setUserExist(true));
+        .catch((err) => {
+          console.log("Error:", err);
+          setUserExist(true);
+        });
 
-      resetForm();
+      //   resetForm();
     },
   });
 
