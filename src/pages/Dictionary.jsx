@@ -1,17 +1,11 @@
 import React, { useEffect } from "react";
-import { auth } from "../firebase";
+// import { auth } from "../firebase";
 
-const Dictionary = ({ onAuthStateChanged }) => {
+const Dictionary = () => {
   // https://api.dictionaryapi.dev/api/v2/entries/en/<word>
 
   useEffect(() => {
-    const listen = onAuthStateChanged(auth, (user) => {
-      console.log(user);
-    });
-
-    return () => {
-      listen();
-    };
+    console.log("HI");
   }, []);
 
   return (

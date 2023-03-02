@@ -7,11 +7,14 @@ import { auth } from "../firebase";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { useFormik } from "formik";
 import * as Yup from "yup";
+import spinner from "../svg/spinner.svg";
 
 const Login = () => {
   const [bgToggle, setBgToggle] = useState(false);
   const [passwordToggle, setPasswordToggle] = useState(false);
-  const [userExist, setUserExist] = useState(false);
+  const [errorMessage, setErrorMessage] = useState(false);
+  const [isLogIn, setIsLogIn] = useState(false);
+
   const navigate = useNavigate();
 
   const emailRef = useRef();
@@ -44,15 +47,18 @@ const Login = () => {
       const email = emailRef.current.value;
       const password = passwordRef.current.value;
 
+      setIsLogIn(true);
+
       signInWithEmailAndPassword(auth, email, password)
-        .then((userDetails) => {
-          console.log(userDetails);
+        .then(() => {
           navigate(dictionaryURLs.dico);
         })
         .catch((err) => {
           console.log("Error:", err);
-          setUserExist(true);
-        });
+          setErrorMessage(true);
+          setIsLogIn(false);
+        })
+        .finally(() => setIsLogIn(false));
 
       //   resetForm();
     },
@@ -149,15 +155,23 @@ const Login = () => {
               ) : null}
             </label>
 
-            <p className={userExist ? "block text-center text-red" : "hidden"}>
-              USER NOT FOUND, HAVE YOU CREATED AN ACCOUNT ?
+            <p
+              className={errorMessage ? "block text-center text-red" : "hidden"}
+            >
+              Something went wrong, please check your details or retry.
             </p>
 
             <button
               type="submit"
-              className="mt-8 min-h-[50px] w-full rounded-[6px] border text-[18px] font-medium duration-500 ease-out active:scale-95 md:min-h-[60px] md:rounded-[10px] md:text-[24px] md:font-semibold"
+              className="mt-8 flex min-h-[50px] w-full items-center justify-center rounded-[6px] border text-[18px] font-medium duration-500 ease-out active:scale-95 md:min-h-[60px] md:rounded-[10px] md:text-[24px] md:font-semibold"
             >
-              Log In
+              <img
+                src={spinner}
+                alt="loading..."
+                className={isLogIn ? "block h-[25px] animate-spin" : "hidden"}
+              />
+
+              <span className={isLogIn ? "hidden" : "block"}>Log In</span>
             </button>
           </form>
 

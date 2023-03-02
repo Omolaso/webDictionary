@@ -6,9 +6,9 @@ import SignUp from "./pages/SignUp";
 import Dictionary from "./pages/Dictionary";
 import ProtectedRoute from "./pages/ProtectedRoute";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
-import { onAuthStateChanged } from "firebase/auth";
 
 const Routers = () => {
+  // ROUTES
   const router = createBrowserRouter([
     {
       path: dictionaryURLs.home,
@@ -26,8 +26,8 @@ const Routers = () => {
     {
       path: dictionaryURLs.dico,
       element: (
-        <ProtectedRoute onAuthStateChanged={onAuthStateChanged}>
-          <Dictionary onAuthStateChanged={onAuthStateChanged} />
+        <ProtectedRoute>
+          <Dictionary />
         </ProtectedRoute>
       ),
     },

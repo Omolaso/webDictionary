@@ -40,7 +40,7 @@ const SignUp = () => {
         .matches(passwordRegExp, "Minimum of 8 characters."),
     }),
 
-    onSubmit: () => {
+    onSubmit: ({ resetForm }) => {
       const email = emailRef.current.value;
       const password = passwordRef.current.value;
 
@@ -65,6 +65,8 @@ const SignUp = () => {
           setAccountSuccess(false);
           setAccountFail(false);
         });
+
+      resetForm();
     },
   });
 
