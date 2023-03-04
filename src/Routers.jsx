@@ -22,6 +22,7 @@ const Routers = () => {
     {
       path: dictionaryURLs.signUp,
       element: <SignUp />,
+      errorElement: <ErrorPage />,
     },
     {
       path: dictionaryURLs.dico,
@@ -30,6 +31,7 @@ const Routers = () => {
           <Dictionary />
         </ProtectedRoute>
       ),
+      errorElement: <ErrorPage />,
     },
   ]);
 

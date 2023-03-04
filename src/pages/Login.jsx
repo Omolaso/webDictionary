@@ -128,7 +128,7 @@ const Login = () => {
               className="flex flex-col gap-1 text-[16px] font-medium md:text-[20px] md:font-semibold"
             >
               Password:
-              <div className="flex min-h-[50px] items-center justify-center gap-4 rounded-lg bg-[ransparent] px-3 shadow-[0px_0px_0px_2px_] shadow-grey  hover:shadow-purple">
+              <div className="flex min-h-[50px] flex-row items-center justify-center gap-4 rounded-lg bg-[transparent] px-3 shadow-[0px_0px_0px_2px_] shadow-grey  hover:shadow-purple">
                 <input
                   type={passwordToggle ? "text" : "password"}
                   name="password"
