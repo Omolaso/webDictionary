@@ -36,7 +36,8 @@ const Dictionary = () => {
   const handleSearch = () => {
     if (!inputValue) return;
 
-    !searchResult && setLoading(true);
+    setSearchResult([]);
+    setLoading(true);
 
     fetch(`https://api.dictionaryapi.dev/api/v2/entries/en/${inputValue}`).then(
       (res) =>
@@ -106,6 +107,7 @@ const Dictionary = () => {
             type="button"
             title="Toggle Mode"
             onClick={() => setBgToggle(!bgToggle)}
+            disabled={userSignOut ? true : false}
             className={
               bgToggle
                 ? "flex min-h-[10px] w-full max-w-[40px] items-center rounded-xl bg-white p-[3px] text-grey shadow-[0px_0px_0px_2px_] shadow-purple"
@@ -122,47 +124,50 @@ const Dictionary = () => {
           </button>
         </div>
 
-        <div className="flex w-full items-start justify-center text-grey md:items-center">
-          <div
+        {/* <div className="flex w-full items-start justify-center text-grey md:items-center"> */}
+        <div
+          className={
+            bgToggle
+              ? "flex min-h-[60px] w-full flex-row items-center gap-4 rounded-xl bg-[transparent] px-3 shadow-[0px_0px_0px_2px_] shadow-black hover:shadow-purple md:rounded-3xl"
+              : "flex min-h-[60px] w-full flex-row items-center gap-4 rounded-xl bg-[transparent] px-3 shadow-[0px_0px_0px_2px_] shadow-grey hover:shadow-purple md:rounded-3xl"
+          }
+        >
+          <input
+            type="text"
+            name="word"
+            id="word"
+            placeholder="Search for any word..."
+            readOnly={userSignOut ? true : false}
             className={
               bgToggle
-                ? "flex min-h-[60px] w-full flex-row items-center justify-center gap-4 rounded-xl bg-[transparent] px-3 shadow-[0px_0px_0px_2px_] shadow-black hover:shadow-purple md:rounded-3xl"
-                : "flex min-h-[60px] w-full flex-row items-center justify-center gap-4 rounded-xl bg-[transparent] px-3 shadow-[0px_0px_0px_2px_] shadow-grey hover:shadow-purple md:rounded-3xl"
+                ? "min-h-[40px] min-w-[200px] flex-[1] bg-[transparent] px-3 text-[18px] text-black placeholder:font-extralight placeholder:opacity-50 placeholder:duration-500 focus:outline-0 focus:placeholder:opacity-0 focus:placeholder:duration-500 md:text-[22px]"
+                : "min-h-[40px] min-w-[200px] flex-[1] bg-[transparent] px-3 text-[18px] placeholder:font-extralight placeholder:opacity-50 placeholder:duration-500 focus:outline-0 focus:placeholder:opacity-0 focus:placeholder:duration-500 md:text-[22px]"
             }
+            autoComplete="off"
+            value={inputValue}
+            onChange={(e) => setInputValue(e.target.value)}
+            onKeyUp={(e) => e.key === "Enter" && handleSearch()}
+          />
+          <button
+            type="button"
+            disabled={userSignOut ? true : false}
+            className={
+              bgToggle
+                ? "flex-[0.05] text-[18px] text-black md:text-[30px]"
+                : "flex-[0.05] text-[18px] md:text-[30px]"
+            }
+            onClick={() => handleSearch()}
           >
-            <input
-              type="text"
-              name="word"
-              id="word"
-              placeholder="Search for any word..."
-              className={
-                bgToggle
-                  ? "min-h-[40px] flex-[1] bg-[transparent] px-3 text-[18px] text-black placeholder:font-extralight placeholder:opacity-50 placeholder:duration-500 focus:outline-0 focus:placeholder:opacity-0 focus:placeholder:duration-500 md:text-[22px]"
-                  : "min-h-[40px] flex-[1] bg-[transparent] px-3 text-[18px] placeholder:font-extralight placeholder:opacity-50 placeholder:duration-500 focus:outline-0 focus:placeholder:opacity-0 focus:placeholder:duration-500 md:text-[22px]"
-              }
-              autoComplete="off"
-              value={inputValue}
-              onChange={(e) => setInputValue(e.target.value)}
-              onKeyUp={(e) => e.key === "Enter" && handleSearch()}
-            />
-            <button
-              type="button"
-              className={
-                bgToggle
-                  ? "flex-[0.05] text-[18px] text-black md:text-[30px]"
-                  : "flex-[0.05] text-[18px] md:text-[30px]"
-              }
-              onClick={() => handleSearch()}
-            >
-              <FontAwesomeIcon icon={faPaperPlane} />
-            </button>
-          </div>
+            <FontAwesomeIcon icon={faPaperPlane} />
+          </button>
         </div>
+        {/* </div> */}
 
         <SearchedWord
           searchResult={searchResult}
           loading={loading}
           bgToggle={bgToggle}
+          userSignOut={userSignOut}
         />
       </section>
 
@@ -175,7 +180,7 @@ const Dictionary = () => {
         }
       >
         <div className="flex min-h-[120px] flex-col items-center justify-between">
-          <h1>Do you want to sign out?</h1>
+          <h1>Do you want to log out?</h1>
           <div className="flex w-full items-center justify-between">
             <button
               type="button"

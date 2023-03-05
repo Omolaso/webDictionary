@@ -1,16 +1,16 @@
 import React, { memo } from "react";
 import spinner from "../svg/spinner.svg";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPlay } from "@fortawesome/free-solid-svg-icons";
+import { faPlay, faLinkSlash } from "@fortawesome/free-solid-svg-icons";
 
-const SearchedWord = ({ searchResult, loading, bgToggle }) => {
-  //   console.log(searchResult);
+const SearchedWord = ({ searchResult, loading, bgToggle, userSignOut }) => {
+  console.log(searchResult);
 
   const getAudio = (param) => {
     let wordAudio;
-    const playAudio = param.phonetics.find((item) => item.audio !== "");
-    if (playAudio) {
-      wordAudio = new Audio(playAudio.audio);
+    const audioURL = param.phonetics.find((item) => item.audio !== "");
+    if (audioURL) {
+      wordAudio = new Audio(audioURL.audio);
     }
 
     return wordAudio.play();
@@ -18,17 +18,19 @@ const SearchedWord = ({ searchResult, loading, bgToggle }) => {
 
   const output =
     searchResult &&
+    // searchResult == []
     searchResult.map((result, index) => (
-      <section key={index} className="flex flex-col gap-6">
-        <div className="flex flex-row items-center justify-between">
+      <section
+        key={index}
+        className={
+          bgToggle
+            ? "flex flex-col gap-6 text-black"
+            : "flex flex-col gap-6 text-white"
+        }
+      >
+        <div className="flex min-h-[10vh] flex-row items-center justify-between">
           <div className="flex flex-col gap-5">
-            <h1
-              className={
-                bgToggle
-                  ? "text-[32px] font-bold text-black md:text-[48px]"
-                  : "text-[32px] font-bold text-white md:text-[48px]"
-              }
-            >
+            <h1 className="text-[32px] font-bold md:text-[48px]">
               {result.word}
             </h1>
             <i className="text-[18px] font-bold text-purple md:text-[25px]">
@@ -38,8 +40,9 @@ const SearchedWord = ({ searchResult, loading, bgToggle }) => {
 
           <button
             type="button"
-            className="font-semibold text-white opacity-70 duration-300 hover:opacity-100 active:scale-90"
+            disabled={userSignOut ? true : false}
             onClick={() => getAudio(result)}
+            className="font-semibold text-white opacity-70 duration-300 hover:opacity-100 active:scale-90"
           >
             <FontAwesomeIcon
               icon={faPlay}
@@ -48,7 +51,58 @@ const SearchedWord = ({ searchResult, loading, bgToggle }) => {
           </button>
         </div>
 
-        <div className="min-h-[30vh] border border-red"></div>
+        <div className="flex min-h-[20vh] w-full flex-col gap-8">
+          {result.meanings.map((meaning) => (
+            <div
+              key={meaning.partOfSpeech}
+              className="flex w-full flex-col gap-6"
+            >
+              <div className="flex w-full flex-row flex-wrap items-center justify-between gap-4">
+                <h1 className="text-[20px]">{meaning.partOfSpeech}</h1>
+                <div className="ml-6 w-full max-w-[500px]">
+                  <hr
+                    className={
+                      bgToggle
+                        ? "w-full border-[0.1px] border-black"
+                        : "w-full border-[0.1px] border-grey"
+                    }
+                  />
+                </div>
+              </div>
+
+              <div className="flex flex-col gap-3">
+                <small className="text-[15px] text-grey">Meaning</small>
+                <ul className="flex flex-col gap-4">
+                  {meaning.definitions.map((item) => (
+                    <div key={item.definition}>
+                      <li className="">{item.definition}</li>
+                      <i className="text-grey">
+                        {item.example && item.example}
+                      </i>
+                    </div>
+                  ))}
+                </ul>
+              </div>
+            </div>
+          ))}
+        </div>
+
+        <div className=" flex min-h-[10vh] w-full flex-col items-start justify-between border-t border-grey py-2">
+          <p className="text-grey underline">Source</p>
+          {result.sourceUrls.map((source) => (
+            <p key={source}>
+              {source}
+              <a
+                href={source}
+                target="_blank"
+                rel="noreferrer"
+                className="ml-2"
+              >
+                <FontAwesomeIcon icon={faLinkSlash} />
+              </a>
+            </p>
+          ))}
+        </div>
       </section>
     ));
 

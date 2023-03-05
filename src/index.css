@@ -39,3 +39,16 @@ transition: all 0.3s ease-in-out;
   visibility: visible;
   transform: scaleX(1);
 }
+
+.definition-list{
+  position: relative;
+}
+.definition-list::before{
+  position: absolute;
+ 
+  content: "";
+  width: 7px;
+  height: 7px;
+  background: #9750DD;
+  border-radius: 50%;
+}

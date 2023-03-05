@@ -68,8 +68,8 @@ const Login = () => {
     <main
       className={
         bgToggle
-          ? "flex min-h-screen flex-col gap-8 bg-white p-4 font-mono md:p-8"
-          : "flex min-h-screen flex-col gap-8 bg-black p-4 font-mono md:p-8"
+          ? "flex min-h-screen flex-col gap-8 bg-white p-4 font-mono text-black md:p-8"
+          : "flex min-h-screen flex-col gap-8 bg-black p-4 font-mono text-grey md:p-8"
       }
     >
       <section className="flex flex-row items-center justify-end gap-4">
@@ -79,8 +79,8 @@ const Login = () => {
           onClick={() => setBgToggle(!bgToggle)}
           className={
             bgToggle
-              ? "flex min-h-[10px] w-full max-w-[40px] items-center self-end rounded-xl bg-white p-[3px] text-grey shadow-[0px_0px_0px_2px_] shadow-purple"
-              : "flex min-h-[10px] w-full max-w-[40px] items-center self-end rounded-xl bg-purple p-[3px] text-grey shadow-[0px_0px_0px_2px_] shadow-purple"
+              ? "flex min-h-[10px] w-full max-w-[40px] items-center self-end rounded-xl bg-white p-[3px] shadow-[0px_0px_0px_2px_] shadow-purple"
+              : "flex min-h-[10px] w-full max-w-[40px] items-center self-end rounded-xl bg-purple p-[3px] shadow-[0px_0px_0px_2px_] shadow-purple"
           }
         >
           <div
@@ -94,9 +94,9 @@ const Login = () => {
         <FontAwesomeIcon icon={faMoon} className="text-[16px] text-purple" />
       </section>
 
-      <section className="flex items-start justify-center text-grey md:items-center">
+      <section className="flex items-start justify-center md:items-center">
         <div className="flex flex-col gap-5">
-          <h1 className="text-artsy-text-greyBlack text-center text-[30px] font-bold md:text-left md:text-[48px] md:font-medium">
+          <h1 className="text-center text-[30px] font-bold md:text-left md:text-[48px] md:font-medium">
             Login to access your dictionary!
           </h1>
 
