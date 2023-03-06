@@ -3,8 +3,14 @@ import spinner from "../svg/spinner.svg";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlay, faLinkSlash } from "@fortawesome/free-solid-svg-icons";
 
-const SearchedWord = ({ searchResult, loading, bgToggle, userSignOut }) => {
-  console.log(searchResult);
+const SearchedWord = ({
+  searchResult,
+  loading,
+  bgToggle,
+  userSignOut,
+  errorMsg,
+}) => {
+  //   console.log(searchResult);
 
   const getAudio = (param) => {
     let wordAudio;
@@ -16,9 +22,32 @@ const SearchedWord = ({ searchResult, loading, bgToggle, userSignOut }) => {
     return wordAudio.play();
   };
 
-  const output =
+  //   const objOutput = (
+  //     <section className="flex flex-col items-center justify-center gap-8">
+  //       <h1>{searchResult.title}</h1>
+  //       <p>
+  //         {searchResult.message} {searchResult.resolution}
+  //       </p>
+  //     </section>
+  //   );
+
+  const errorMessage = errorMsg && (
+    <div
+      className={
+        bgToggle
+          ? "flex flex-col items-center justify-center gap-5 text-center text-black"
+          : "flex flex-col items-center justify-center gap-5 text-center"
+      }
+    >
+      <h1 className="text-[20px] font-bold">No Definition Found</h1>
+      <p className="text-[18px] font-bold">
+        You can try the search again at later time or head to the web instead.
+      </p>
+    </div>
+  );
+
+  const arrOutput =
     searchResult &&
-    // searchResult == []
     searchResult.map((result, index) => (
       <section
         key={index}
@@ -120,7 +149,9 @@ const SearchedWord = ({ searchResult, loading, bgToggle, userSignOut }) => {
         />
       </section>
 
-      <section>{output}</section>
+      <section>{arrOutput}</section>
+
+      <section>{errorMessage}</section>
     </main>
   );
 };

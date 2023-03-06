@@ -12,7 +12,7 @@ module.exports = {
       green: "#5BED44",
     },
     fontFamily: {
-      sans: ["Roboto", "sans-serif"],
+      sans: ["Poppins", "sans-serif"],
       serif: ["Merriweather", "serif"],
       mono: ["Cursive", "monospace"],
     },

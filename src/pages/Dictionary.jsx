@@ -13,6 +13,7 @@ const Dictionary = () => {
   const [userSignOut, setUserSignOut] = useState(false);
   const [inputValue, setInputValue] = useState("");
   const [searchResult, setSearchResult] = useState([]);
+  const [errorMsg, setErrMsg] = useState(false);
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
@@ -37,22 +38,26 @@ const Dictionary = () => {
     if (!inputValue) return;
 
     setSearchResult([]);
+    setErrMsg(false);
     setLoading(true);
 
-    fetch(`https://api.dictionaryapi.dev/api/v2/entries/en/${inputValue}`).then(
-      (res) =>
-        res
-          .json()
-          .then((data) => {
-            setSearchResult(data);
-            setLoading(false);
-          })
-          .catch((err) => {
-            setLoading(false);
-            console.log("Error", err);
-          })
-          .finally(() => setLoading(false))
-    );
+    fetch(`https://api.dictionaryapi.dev/api/v2/entries/en/${inputValue}`)
+      .then((response) => {
+        if (response.ok) {
+          return response.json();
+        }
+        setErrMsg(true);
+        throw response;
+      })
+      .then((data) => {
+        setSearchResult(data);
+        setLoading(false);
+      })
+      .catch((err) => {
+        setLoading(false);
+        console.log("Error", err);
+      })
+      .finally(() => setLoading(false));
   };
 
   const handleSignOut = () => {
@@ -73,8 +78,8 @@ const Dictionary = () => {
     <main
       className={
         bgToggle
-          ? "relative flex min-h-screen items-start justify-center bg-white p-6 font-mono text-grey md:p-8"
-          : "relative flex min-h-screen items-start justify-center bg-black p-6 font-mono text-grey md:p-8"
+          ? "relative flex min-h-screen items-start justify-center bg-white p-6 font-sans text-grey md:p-8"
+          : "relative flex min-h-screen items-start justify-center bg-black p-6 font-sans text-grey md:p-8"
       }
     >
       <section
@@ -168,6 +173,7 @@ const Dictionary = () => {
           loading={loading}
           bgToggle={bgToggle}
           userSignOut={userSignOut}
+          errorMsg={errorMsg}
         />
       </section>
 
@@ -175,13 +181,13 @@ const Dictionary = () => {
       <section
         className={
           userSignOut
-            ? "fixed flex min-h-[150px] w-full max-w-[300px] scale-[1] items-center justify-center rounded-lg bg-white p-4 shadow-[0px_0px_0px_2px_] shadow-purple duration-500 ease-in-out"
-            : "fixed flex min-h-[150px] w-full max-w-[300px] scale-[0] items-center justify-center rounded-lg bg-white p-4 shadow-[0px_0px_0px_2px_] shadow-purple duration-500 ease-in-out"
+            ? "fixed top-[30%] flex min-h-[150px] w-full max-w-[300px] scale-[1] items-center justify-center rounded-lg bg-white p-4 shadow-[0px_0px_0px_2px_] shadow-purple duration-500 ease-in-out"
+            : "fixed top-[30%] flex min-h-[150px] w-full max-w-[300px] scale-[0] items-center justify-center rounded-lg bg-white p-4 shadow-[0px_0px_0px_2px_] shadow-purple duration-500 ease-in-out"
         }
       >
-        <div className="flex min-h-[120px] flex-col items-center justify-between">
+        <div className="flex min-h-[120px] w-full flex-col items-center justify-between">
           <h1>Do you want to log out?</h1>
-          <div className="flex w-full items-center justify-between">
+          <div className="flex w-full max-w-[220px] items-center justify-between">
             <button
               type="button"
               onClick={() => handleSignOut()}

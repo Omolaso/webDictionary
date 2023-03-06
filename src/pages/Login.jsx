@@ -68,8 +68,8 @@ const Login = () => {
     <main
       className={
         bgToggle
-          ? "flex min-h-screen flex-col gap-8 bg-white p-4 font-mono text-black md:p-8"
-          : "flex min-h-screen flex-col gap-8 bg-black p-4 font-mono text-grey md:p-8"
+          ? "flex min-h-screen flex-col gap-8 bg-white p-4 font-sans text-black md:p-8"
+          : "flex min-h-screen flex-col gap-8 bg-black p-4 font-sans text-grey md:p-8"
       }
     >
       <section className="flex flex-row items-center justify-end gap-4">
