@@ -22,15 +22,6 @@ const SearchedWord = ({
     return wordAudio.play();
   };
 
-  //   const objOutput = (
-  //     <section className="flex flex-col items-center justify-center gap-8">
-  //       <h1>{searchResult.title}</h1>
-  //       <p>
-  //         {searchResult.message} {searchResult.resolution}
-  //       </p>
-  //     </section>
-  //   );
-
   const errorMessage = errorMsg && (
     <div
       className={
