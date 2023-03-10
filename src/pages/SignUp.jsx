@@ -12,7 +12,6 @@ const SignUp = () => {
   const [bgToggle, setBgToggle] = useState(false);
   const [passwordToggle, setPasswordToggle] = useState(false);
   const [accountSuccess, setAccountSuccess] = useState(false);
-  const [accountFail, setAccountFail] = useState(false);
 
   const emailRef = useRef();
   const passwordRef = useRef();
@@ -40,13 +39,12 @@ const SignUp = () => {
         .matches(passwordRegExp, "Minimum of 8 characters."),
     }),
 
-    onSubmit: ({ resetForm }) => {
+    onSubmit: (values, { resetForm }) => {
       const email = emailRef.current.value;
       const password = passwordRef.current.value;
 
       createUserWithEmailAndPassword(auth, email, password)
         .then(() => {
-          // console.log(userDetails);
           setAccountSuccess(true);
 
           setTimeout(() => {
@@ -54,19 +52,12 @@ const SignUp = () => {
           }, 5000);
         })
         .catch((err) => {
-          console.log("Error:", err);
-          setAccountFail(true);
-
-          setTimeout(() => {
-            setAccountFail(false);
-          }, 5000);
+          // console.log(err);
+          alert(err);
         })
         .finally(() => {
-          setAccountSuccess(false);
-          setAccountFail(false);
+          resetForm();
         });
-
-      resetForm();
     },
   });
 
@@ -140,7 +131,7 @@ const SignUp = () => {
                   name="password"
                   id="password"
                   ref={passwordRef}
-                  placeholder="xxxxxxxxxxx"
+                  placeholder="*****"
                   className="h-full flex-1 bg-[transparent] placeholder:font-extralight placeholder:opacity-50 placeholder:duration-500 focus:outline-0 focus:placeholder:opacity-0 focus:placeholder:duration-500"
                   autoComplete="off"
                   {...formik.getFieldProps("password")}
@@ -193,24 +184,6 @@ const SignUp = () => {
           <FontAwesomeIcon icon={faXmarkCircle} />
         </button>
         <h1>Account created successfully. Proceed to login page.</h1>
-      </div>
-
-      {/* ERROR MESSAGE FOR ACCOUNT CREATION FAILURE */}
-      <div
-        className={
-          accountFail
-            ? "fixed top-[2%] left-[10%] flex min-h-[50px] w-full max-w-[200px] flex-col bg-red p-2 text-white duration-300 md:left-[30%] md:max-w-[420px]"
-            : "fixed top-[-50%] left-[10%] flex w-full max-w-[200px] flex-col bg-red p-2 text-white duration-300 md:left-[30%] md:max-w-[420px]"
-        }
-      >
-        <button
-          type="button"
-          onClick={() => setAccountFail(false)}
-          className="self-end"
-        >
-          <FontAwesomeIcon icon={faXmarkCircle} />
-        </button>
-        <h1>There was an error, please try again.</h1>
       </div>
     </main>
   );

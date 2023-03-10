@@ -134,7 +134,7 @@ const Login = () => {
                   name="password"
                   id="password"
                   ref={passwordRef}
-                  placeholder="xxxxxxxxxxx"
+                  placeholder="*****"
                   className="h-full flex-1 bg-[transparent] placeholder:font-extralight placeholder:opacity-50 placeholder:duration-500 focus:outline-0 focus:placeholder:opacity-0 focus:placeholder:duration-500"
                   autoComplete="off"
                   {...formik.getFieldProps("password")}

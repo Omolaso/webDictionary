@@ -55,7 +55,8 @@ const Dictionary = () => {
       })
       .catch((err) => {
         setLoading(false);
-        console.log("Error", err);
+        alert(err);
+        // console.log("Error", err);
       })
       .finally(() => setLoading(false));
   };

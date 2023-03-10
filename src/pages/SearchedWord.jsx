@@ -32,7 +32,7 @@ const SearchedWord = ({
     >
       <h1 className="text-[20px] font-bold">No Definition Found</h1>
       <p className="text-[18px] font-bold">
-        You can try the search again at later time or head to the web instead.
+        You can try the search again at later time or head to the google.
       </p>
     </div>
   );
@@ -91,7 +91,9 @@ const SearchedWord = ({
               </div>
 
               <div className="flex flex-col gap-3">
-                <small className="text-[15px] text-grey">Meaning</small>
+                <small className="text-[15px] text-grey">
+                  {meaning.definitions.length > 1 ? "Meanings:" : "Meaning:"}
+                </small>
                 <ul className="flex flex-col gap-4">
                   {meaning.definitions.map((item) => (
                     <div key={item.definition}>
