@@ -7,11 +7,13 @@ import { auth } from "../firebase";
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { useFormik } from "formik";
 import * as Yup from "yup";
+import spinner from "../svg/spinner.svg";
 
 const SignUp = () => {
   const [bgToggle, setBgToggle] = useState(false);
   const [passwordToggle, setPasswordToggle] = useState(false);
   const [accountSuccess, setAccountSuccess] = useState(false);
+  const [isSignUp, setIsSignUp] = useState(false);
 
   const emailRef = useRef();
   const passwordRef = useRef();
@@ -43,9 +45,12 @@ const SignUp = () => {
       const email = emailRef.current.value;
       const password = passwordRef.current.value;
 
+      setIsSignUp(true);
+
       createUserWithEmailAndPassword(auth, email, password)
         .then(() => {
           setAccountSuccess(true);
+          setIsSignUp(false);
 
           setTimeout(() => {
             setAccountSuccess(false);
@@ -53,6 +58,7 @@ const SignUp = () => {
         })
         .catch((err) => {
           // console.log(err);
+          setIsSignUp(false);
           alert(err);
         })
         .finally(() => {
@@ -153,9 +159,17 @@ const SignUp = () => {
 
             <button
               type="submit"
-              className="mt-8 min-h-[50px] w-full rounded-[6px] border text-[18px] font-medium duration-500 ease-out active:scale-95 md:min-h-[60px] md:rounded-[10px] md:text-[24px] md:font-semibold"
+              className="mt-8 flex min-h-[50px] w-full items-center justify-center rounded-[6px] border text-[18px] font-medium duration-500 ease-out active:scale-95 md:min-h-[60px] md:rounded-[10px] md:text-[24px] md:font-semibold"
             >
-              Create account
+              <img
+                src={spinner}
+                alt="loading..."
+                className={isSignUp ? "block h-[25px] animate-spin" : "hidden"}
+              />
+
+              <span className={isSignUp ? "hidden" : "block"}>
+                Create account
+              </span>
             </button>
           </form>
 

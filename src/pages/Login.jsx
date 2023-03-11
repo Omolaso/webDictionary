@@ -48,6 +48,7 @@ const Login = () => {
       const password = passwordRef.current.value;
 
       setIsLogIn(true);
+      setErrorMessage(false);
 
       signInWithEmailAndPassword(auth, email, password)
         .then(() => {
@@ -112,7 +113,7 @@ const Login = () => {
                 id="email"
                 ref={emailRef}
                 placeholder="johndoe@gmail.com"
-                className="min-h-[50px] rounded-lg bg-[transparent] px-3 shadow-[0px_0px_0px_2px_] shadow-grey placeholder:font-extralight placeholder:opacity-50 placeholder:duration-500 hover:shadow-purple focus:outline-0 focus:placeholder:opacity-0 focus:placeholder:duration-500"
+                className="min-h-[50px] rounded-lg bg-[transparent] px-3 shadow-[0px_0px_0px_2px_] shadow-grey  placeholder:font-extralight placeholder:opacity-50 placeholder:duration-500 hover:shadow-purple focus:outline-0 focus:placeholder:opacity-0 focus:placeholder:duration-500"
                 autoComplete="off"
                 {...formik.getFieldProps("email")}
               />

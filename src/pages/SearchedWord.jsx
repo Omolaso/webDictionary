@@ -112,7 +112,7 @@ const SearchedWord = ({
         <div className=" flex min-h-[10vh] w-full flex-col items-start justify-between border-t border-grey py-2">
           <p className="text-grey underline">Source</p>
           {result.sourceUrls.map((source) => (
-            <p key={source}>
+            <p key={source} className="flex flex-row flex-wrap">
               {source}
               <a
                 href={source}
