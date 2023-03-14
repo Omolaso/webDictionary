@@ -3,4 +3,5 @@ export const dictionaryURLs = {
   login: "/login",
   signUp: "/signup",
   dico: "/dictionary",
+  storedWords: "/yoursearchedwords",
 };

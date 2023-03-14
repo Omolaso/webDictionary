@@ -4,6 +4,7 @@ import Login from "./pages/Login";
 import ErrorPage from "./pages/ErrorPage";
 import SignUp from "./pages/SignUp";
 import Dictionary from "./pages/Dictionary";
+import StoredWords from "./pages/StoredWords";
 import ProtectedRoute from "./pages/ProtectedRoute";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 
@@ -29,6 +30,15 @@ const Routers = () => {
       element: (
         <ProtectedRoute>
           <Dictionary />
+        </ProtectedRoute>
+      ),
+      errorElement: <ErrorPage />,
+    },
+    {
+      path: dictionaryURLs.storedWords,
+      element: (
+        <ProtectedRoute>
+          <StoredWords />
         </ProtectedRoute>
       ),
       errorElement: <ErrorPage />,

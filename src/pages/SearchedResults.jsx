@@ -3,7 +3,7 @@ import spinner from "../svg/spinner.svg";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlay, faLinkSlash } from "@fortawesome/free-solid-svg-icons";
 
-const SearchedWord = ({
+const SearchedResults = ({
   searchResult,
   loading,
   bgToggle,
@@ -62,7 +62,11 @@ const SearchedWord = ({
             type="button"
             disabled={userSignOut ? true : false}
             onClick={() => getAudio(result)}
-            className="font-semibold text-white opacity-70 duration-300 hover:opacity-100 active:scale-90"
+            className={
+              result.phonetics.find((item) => item.audio !== "")
+                ? "block font-semibold text-white opacity-70 duration-300 hover:opacity-100 active:scale-90"
+                : "hidden"
+            }
           >
             <FontAwesomeIcon
               icon={faPlay}
@@ -72,11 +76,8 @@ const SearchedWord = ({
         </div>
 
         <div className="flex min-h-[20vh] w-full flex-col gap-8">
-          {result.meanings.map((meaning) => (
-            <div
-              key={meaning.partOfSpeech}
-              className="flex w-full flex-col gap-6"
-            >
+          {result.meanings.map((meaning, index) => (
+            <div key={index} className="flex w-full flex-col gap-6">
               <div className="flex w-full flex-row flex-wrap items-center justify-between gap-4">
                 <h1 className="text-[20px]">{meaning.partOfSpeech}</h1>
                 <div className="ml-6 w-full max-w-[500px]">
@@ -94,7 +95,7 @@ const SearchedWord = ({
                 <small className="text-[15px] text-grey">
                   {meaning.definitions.length > 1 ? "Meanings:" : "Meaning:"}
                 </small>
-                <ul className="flex flex-col gap-4">
+                <ul className="flex flex-col gap-8">
                   {meaning.definitions.map((item) => (
                     <div key={item.definition}>
                       <li className="">{item.definition}</li>
@@ -149,4 +150,4 @@ const SearchedWord = ({
   );
 };
 
-export default memo(SearchedWord);
+export default memo(SearchedResults);
