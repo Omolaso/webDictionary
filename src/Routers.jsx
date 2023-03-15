@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { dictionaryURLs } from "./URLS";
 import Login from "./pages/Login";
 import ErrorPage from "./pages/ErrorPage";
@@ -9,6 +9,8 @@ import ProtectedRoute from "./pages/ProtectedRoute";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 
 const Routers = () => {
+  const [bgToggle, setBgToggle] = useState(false);
+
   // ROUTES
   const router = createBrowserRouter([
     {
@@ -29,7 +31,7 @@ const Routers = () => {
       path: dictionaryURLs.dico,
       element: (
         <ProtectedRoute>
-          <Dictionary />
+          <Dictionary bgToggle={bgToggle} setBgToggle={setBgToggle} />
         </ProtectedRoute>
       ),
       errorElement: <ErrorPage />,
@@ -38,7 +40,7 @@ const Routers = () => {
       path: dictionaryURLs.storedWords,
       element: (
         <ProtectedRoute>
-          <StoredWords />
+          <StoredWords bgToggle={bgToggle} />
         </ProtectedRoute>
       ),
       errorElement: <ErrorPage />,

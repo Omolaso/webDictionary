@@ -6,9 +6,8 @@ import { faPaperPlane } from "@fortawesome/free-regular-svg-icons";
 import SearchedResults from "./SearchedResults";
 import Sidebar from "../components/Sidebar";
 
-const Dictionary = () => {
+const Dictionary = ({ bgToggle, setBgToggle }) => {
   const [currentUser, setCurrentUser] = useState(null);
-  const [bgToggle, setBgToggle] = useState(false);
   const [userSignOut, setUserSignOut] = useState(false);
   const [inputValue, setInputValue] = useState("");
   const [searchResult, setSearchResult] = useState([]);
@@ -50,7 +49,13 @@ const Dictionary = () => {
         alert(err);
       })
       .finally(() => {
-        window.localStorage.setItem(inputValue.toUpperCase(), inputValue);
+        window.localStorage.setItem(
+          inputValue.toUpperCase(),
+          inputValue.length > 1
+            ? inputValue.charAt(0).toUpperCase() +
+                inputValue.substring(1, inputValue.length).toLowerCase()
+            : inputValue.toUpperCase()
+        );
         setLoading(false);
       });
   };
@@ -76,7 +81,7 @@ const Dictionary = () => {
               type="button"
               title="Toggle Sidebar"
               onClick={() => setToggleSidebar(true)}
-              className="rounded-full border border-purple bg-purple p-2 font-semibold text-white active:scale-95"
+              className="rounded-full bg-purple p-2 font-semibold text-white duration-300 active:scale-95"
             >
               {currentUser && currentUser.email.substring(0, 2).toUpperCase()}
             </button>

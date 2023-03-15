@@ -27,7 +27,7 @@ const Sidebar = ({ userSignOut, setUserSignOut, setToggleSidebar }) => {
   };
 
   return (
-    <>
+    <main className="relative flex items-center justify-center">
       <section
         className={
           userSignOut
@@ -39,7 +39,7 @@ const Sidebar = ({ userSignOut, setUserSignOut, setToggleSidebar }) => {
           <li className="self-end">
             <button
               type="button"
-              className="rounded-full border border-purple bg-purple p-3 font-semibold text-white hover:opacity-90 active:scale-95"
+              className="rounded-full bg-purple p-3 font-semibold text-white duration-300 hover:opacity-90 active:scale-95"
               disabled={userSignOut ? true : false}
               title="Close Modal"
               onClick={() => setToggleSidebar(false)}
@@ -51,7 +51,7 @@ const Sidebar = ({ userSignOut, setUserSignOut, setToggleSidebar }) => {
           <li className="">
             <button
               type="button"
-              className="rounded-lg border border-purple bg-purple p-3 font-semibold text-white hover:opacity-90 active:scale-95"
+              className="rounded-lg bg-purple p-3 font-semibold text-white duration-300 hover:opacity-90 active:scale-95"
               disabled={userSignOut ? true : false}
               onClick={() => navigate(dictionaryURLs.storedWords)}
             >
@@ -62,7 +62,7 @@ const Sidebar = ({ userSignOut, setUserSignOut, setToggleSidebar }) => {
           <li className="">
             <button
               type="button"
-              className="rounded-lg border border-purple bg-purple p-3 font-semibold text-white hover:opacity-90 active:scale-95"
+              className="rounded-lg bg-purple p-3 font-semibold text-white duration-300 hover:opacity-90 active:scale-95"
               disabled={userSignOut ? true : false}
               onClick={() => handleLogoutModalPrompt()}
             >
@@ -76,8 +76,8 @@ const Sidebar = ({ userSignOut, setUserSignOut, setToggleSidebar }) => {
       <section
         className={
           userSignOut
-            ? "fixed top-[30%] left-[10%] flex min-h-[150px] w-full max-w-[300px] scale-[1] items-center justify-center rounded-lg bg-white p-4 shadow-[0px_0px_0px_2px_] shadow-purple duration-500 ease-in-out"
-            : "fixed top-[30%] left-[10%] flex min-h-[150px] w-full max-w-[300px] scale-[0] items-center justify-center rounded-lg bg-white p-4 shadow-[0px_0px_0px_2px_] shadow-purple duration-500 ease-in-out"
+            ? "fixed flex min-h-[150px] w-full max-w-[300px] scale-[1] items-center justify-center rounded-lg bg-white p-4 shadow-[0px_0px_0px_2px_] shadow-purple duration-500 ease-in-out"
+            : "fixed flex min-h-[150px] w-full max-w-[300px] scale-[0] items-center justify-center rounded-lg bg-white p-4 shadow-[0px_0px_0px_2px_] shadow-purple duration-500 ease-in-out"
         }
       >
         <div className="flex min-h-[120px] w-full flex-col items-center justify-between">
@@ -101,7 +101,7 @@ const Sidebar = ({ userSignOut, setUserSignOut, setToggleSidebar }) => {
           </div>
         </div>
       </section>
-    </>
+    </main>
   );
 };
 
