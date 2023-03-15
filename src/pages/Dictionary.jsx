@@ -46,7 +46,8 @@ const Dictionary = ({ bgToggle, setBgToggle }) => {
       })
       .catch((err) => {
         setLoading(false);
-        alert(err);
+        // console.log(err);
+        alert(`Error ${err.status}`);
       })
       .finally(() => {
         window.localStorage.setItem(
